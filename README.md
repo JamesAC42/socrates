@@ -1,0 +1,3 @@
+# socrates
+
+## become an expert
