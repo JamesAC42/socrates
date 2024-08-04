@@ -1,0 +1,63 @@
+@import "./mixins.module.scss";
+
+.navbar {
+    position:fixed;
+    top:0;left:50%;
+    transform:translate(-50%,1rem);
+
+    z-index:1000;
+
+    .navbarInner {
+        position:relative;
+        @include flex-center-row;
+
+        background:#ffffff00;
+        backdrop-filter:blur(5px) brightness(1.09);
+        outline:2px solid #fff;
+
+        border-radius:1.6rem;
+        box-shadow: 0 0.5rem 1.5rem -0.3rem #23264c53;
+
+        padding:0 0.8rem;
+
+        a {
+            text-decoration: none;
+            color:#000000;
+            margin:0.5rem 0rem;
+            &:hover {
+                color:#c19a57;
+            }
+            .navbarItem {
+                position:relative;
+                padding:0.5rem 2rem;
+                text-align:center;
+                width:4rem;
+                z-index:5;
+                cursor:pointer;
+    
+                &.active {
+                    color:#fff;
+                    background: linear-gradient(to bottom right, #a15f22, #724115);
+                    box-shadow: 0 0.1rem 0.3rem 0rem #2c2c2c6d;
+                    border-radius:2rem;
+                }
+            }
+        }
+
+    }
+
+    @media screen and (max-width:1000px) {
+
+        .navbarInner {
+            padding:0 0.3em;
+            a {
+                margin:0.2rem 0;
+                .navbarItem {
+                    font-size:0.9rem;
+                    padding:0.5rem 1rem;
+                }
+            }
+        }
+    }
+
+}

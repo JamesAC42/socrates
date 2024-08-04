@@ -17,7 +17,11 @@
     "pg-hstore": "^2.3.4",
     "redis": "^3.1.2",
     "sanitize-html": "^2.13.0",
-    "sequelize": "^6.37.3",
-    "sqlstring": "^2.3.3"
+    "sqlstring": "^2.3.3",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "google-auth-library": "^9.13.0",
+    "sequelize": "^6.37.3"
   }
 }

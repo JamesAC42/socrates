@@ -1,0 +1,77 @@
+@import "mixins.module.scss";
+
+.about {
+    
+    position:relative;
+
+    @include flex-center-col;
+    @include content-outer;
+
+    align-items:start;
+
+    h1, h2, h4, p, ul {
+        text-align:left;
+        margin:0;
+        max-width:50dvw;
+    }
+
+    ul {
+        padding-left:1rem;
+    }
+
+    h1, h2 {
+        margin-bottom:0.5rem;
+    }
+
+    .buttons {
+
+        .getStarted {
+            @include simple-button;
+            animation:appear-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1;
+            @include shimmer-button;
+            margin:1rem 0;
+        }
+    }
+
+    .footer {
+        @include flex-center-row;
+        width:100%;
+        margin-top:2rem;
+        
+        .footerLinks {
+            @include flex-center-row;
+            gap:1rem;
+            width:fit-content;
+        }
+    }
+    
+    @media screen and (max-width:1000px) {
+        
+        @include compact-container;
+
+        justify-content: flex-start;
+
+        h1, h2, h4, p, ul {
+            max-width:100dvw;
+            width:100%;
+        }
+
+        h1, h2 {
+            text-align:center;
+        }
+
+        .buttons {
+            width:100%;
+            .getStarted {
+                margin:1rem auto;
+            }
+        }
+
+        .footer {
+            width:calc(100dvw - 6rem);
+            padding:0 2rem;
+        }
+
+    }
+
+}

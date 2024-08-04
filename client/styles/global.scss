@@ -1,0 +1,13 @@
+@import "./mixins.module.scss";
+
+@font-face {
+  font-family: 'Platypi';
+  src: url('../fonts/Platypi.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+    overflow:hidden;
+    font-family:"Platypi",serif;
+}

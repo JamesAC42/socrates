@@ -14,6 +14,8 @@ const redisLogin = require('./redis_login.json');
 
 redisClient.auth(redisLogin.password);
 
+const datamodels = require('./datamodels.js');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
@@ -28,11 +30,22 @@ app.use(
     },
   })
 );
+
 // Middleware
 app.use(express.json());
 
 const LLM = require("./LLM");
 const llm = new LLM(redisClient);
+
+const getConversation = require("./controllers/getConversation.js");
+const evaluate = require("./controllers/evaluate.js");
+const restartConversation = require("./controllers/restartConversation.js");
+const sendMessage = require("./controllers/sendMessage.js");
+
+const login = require("./controllers/login.js");
+const logout = require("./controllers/logout.js");
+const getSession = require('./controllers/getSession.js');
+const startConversation = require('./controllers/startConversation.js');
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -40,16 +53,36 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-app.get('/test', (req, res) => {
-    res.json({hello:"world"});
+app.get('/getConversation', async (req, res) => {
+    getConversation(req, res, llm);
+});
+
+app.post('/getSession', async (req, res) => {
+    getSession(req, res, datamodels);
+});
+
+app.post('/startConversation', async (req, res) => {
+    startConversation(req, res, llm);
 });
 
 app.post('/sendMessage', async (req, res) => {
+    sendMessage(req, res, llm);
+});
 
-    const {message} = req.body;
-    let response = await llm.conversationAddMessage(1,1,message);
-    res.json({success:true, message: response});
+app.post('/evaluate', async (req, res) => {
+    evaluate(req, res, llm);
+});
 
+app.post('/restartConversation', async (req, res) => {
+    restartConversation(req, res, llm);
+});
+
+app.post('/login', async (req, res) => {
+    login(req, res, datamodels);
+});
+
+app.post('/logout', async (req, res) => {
+    logout(req, res);
 });
 
 // Start the server

@@ -1,0 +1,85 @@
+@import "./mixins.module.scss";
+
+.userInfoContainer {
+
+    position:relative;
+
+    @include flex-center-row;
+
+    background:#ffffff76;
+    backdrop-filter:blur(10px) brightness(0.95);
+
+    padding:3rem;
+    border-radius:0.5rem;
+    border:2px solid #ffffff;
+    box-shadow:0 0 1.4rem 0.2rem #fff;
+
+    .profileImage {
+        @include flex-center-row;
+        margin:0 2.5rem;
+        margin-right:4rem;
+        svg {
+            transform:scale(5);
+        }
+    }
+    .infoContainer {
+        @include flex-center-col;
+        align-items: baseline;
+        gap:0.5rem;
+        .profileInfo {
+            position:relative;
+            width:100%;
+            @include flex-center-col;
+            margin:0 1rem; 
+    
+            .label,.info {
+                width:100%;
+                text-align:left;
+            }
+            .label {
+                font-weight:bold;
+                font-size:1.4rem;
+            }
+        }
+    }
+    .logout {
+        .logoutButton {
+            position:relative;
+            padding:0.6rem 1.4rem;
+            border-radius:2rem;
+            border:2px solid #f75858;
+            color:#f75858;
+            margin-left:2rem;
+            font-size:1.3rem;
+            background:#ffffff5d;
+            cursor:pointer;
+            overflow:hidden;
+            transition:all .1s ease-in-out;
+
+            animation: appear-up .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1;
+            &:hover {
+                color:#fff;
+                @include shimmer-button;
+                background:#f75858;
+            }
+            
+        }
+    }
+
+    @media screen and (max-width:1000px) {
+        @include compact-container;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap:2rem;
+        .profileImage {
+            margin:2rem 0;
+        }
+        .logout {
+            .logoutButton {
+                margin-left:0;
+                font-size:1rem;
+                padding:0.5rem 2rem;
+            }
+        }
+    }
+}

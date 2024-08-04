@@ -1,0 +1,53 @@
+@import "./mixins.module.scss";
+
+.signinOuter {
+
+    position:relative;
+
+    @include flex-center-col;
+
+    padding:3rem;
+    background:#ffffff76;
+    backdrop-filter:blur(10px) brightness(0.9);
+
+    padding:3rem;
+    border-radius:1rem;
+    border:2px solid #ffffff;
+    box-shadow:0 0 1.4rem 0.2rem #fff;
+
+    gap:1rem;
+
+    .signinHeader {
+        margin:0 5rem;
+        h1 {
+            margin-bottom:0;
+        }
+    }
+
+    .signinButton {
+        padding:1rem 2rem;
+        background:#6294f2;
+        border-radius: 0.5rem;
+        animation:appear-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1;
+    }
+
+    
+    @media screen and (max-width:1000px) {
+        @include compact-container;
+
+        justify-content: flex-start;
+
+        .signinHeader {
+            margin:0 2rem;
+
+            h1 {
+                text-align:center;
+            }
+        }
+
+        p {
+            text-align:center;
+        }
+    }
+
+}

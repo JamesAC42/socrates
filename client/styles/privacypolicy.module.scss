@@ -1,0 +1,41 @@
+@import "./mixins.module.scss";
+
+.scrollOuter {
+
+    position:relative;
+    top:0;left:0;
+    height:100dvh;
+    width:100dvw;
+    overflow-y:auto;
+    align-items: baseline;  
+    max-height:100dvh;
+
+    .privacyPolicy {
+        
+        max-width:50dvw;
+        margin:7rem auto;
+        position:relative;
+    
+        @include flex-center-col;
+        @include content-outer;
+        align-items:start;
+    
+        h1, h4, p {
+            text-align:left;
+            margin:0;
+            max-width:50dvw;
+        }
+    }
+
+    @media screen and (max-width:1000px) {
+        .privacyPolicy {
+            @include compact-container;
+            max-width:100dvw;
+            justify-content: flex-start;
+
+            h1, h4, p {
+                max-width:100dvw;
+            }
+        }
+    }
+}
