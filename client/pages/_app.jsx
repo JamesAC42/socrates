@@ -4,6 +4,7 @@ import UserContext from '../contexts/UserContext';
 import {useState} from 'react';
 import UserSession from '@/components/UserSession';
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function App({ Component, pageProps }) {
 
@@ -12,7 +13,7 @@ export default function App({ Component, pageProps }) {
     return (
         <UserContext.Provider value={{userInfo, setUserInfo}}>
             <Head>
-                <link rel="icon" href="/favicon.png" />
+                <Link rel="icon" href="/favicon.png" />
             </Head>
             <UserSession />
             <Script
