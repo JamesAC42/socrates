@@ -36,7 +36,7 @@ export default function Home() {
                 let messages;
                 let cachedMessages = localStorage.getItem("socrates:conversation");
                 if(!cachedMessages) {
-                    const response = await getFetch("/api/getConversation", {});
+                    const response = await getFetch("/socrates/api/getConversation", {});
                     setLoadingConversation(false);
                     if (response.success) {
                         messages = response.conversation;
@@ -142,7 +142,7 @@ export default function Home() {
         try {
 
             setLoadingBegin(true);
-            const response = await postFetch("/api/startConversation", {topic, thesis});
+            const response = await postFetch("/socrates/api/startConversation", {topic, thesis});
             setLoadingBegin(false); 
             if(response.success) {
                 const messages = response.conversation;
@@ -170,7 +170,7 @@ export default function Home() {
         if(!window.confirm("Are you sure you want to restart the conversation? You will lose the current one.")) return;
 
         try {
-            const response = await postFetch("/api/restartConversation", {});
+            const response = await postFetch("/socrates/restartConversation", {});
             if(response.success) {
                 setConversation([]);
                 setActiveThesis("");
@@ -201,7 +201,7 @@ export default function Home() {
             
             // Scroll to bottom after user message is added
             setTimeout(scrollToBottom, 0);
-            const data = await postFetch("/api/sendMessage", { message })
+            const data = await postFetch("/socrates/api/sendMessage", { message })
             setIsLoading(false);
             
             if(data.success) {
@@ -226,7 +226,7 @@ export default function Home() {
         if(!userInfo?.id) return;
         if(isLoadingEval) return;
         setIsLoadingEval(true);
-        const response = await fetch('/api/evaluate', {
+        const response = await fetch('/socrates/api/evaluate', {
             method: 'POST'
         });
         const data = await response.json();

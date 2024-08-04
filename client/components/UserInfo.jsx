@@ -9,7 +9,7 @@ const UserInfo = () => {
     const {userInfo, setUserInfo} = useContext(UserContext);
 
     const logout = async () => { 
-        const response = await postFetch("/api/logout");
+        const response = await postFetch("/socrates/api/logout");
         if(response.success) {
             setUserInfo(null);
         } else {

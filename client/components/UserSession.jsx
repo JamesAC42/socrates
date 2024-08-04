@@ -12,7 +12,7 @@ const UserSession = () => {
             if (userInfo) return;
 
             try {
-                const response = await postFetch("/api/getSession", {});
+                const response = await postFetch("/socrates/api/getSession", {});
                 if (response.success && isMounted) {
                     setUserInfo(response.user);
                 }

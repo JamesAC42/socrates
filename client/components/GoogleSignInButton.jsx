@@ -24,7 +24,7 @@ export default function GoogleSignInButton() {
 
         const handleCredentialResponse = async (response) => {
             
-            const loginResponse = await postFetch("/api/login", {token: response.credential});
+            const loginResponse = await postFetch("/socrates/api/login", {token: response.credential});
             if(loginResponse.success) {
                 setUserInfo(loginResponse.user);
             }
