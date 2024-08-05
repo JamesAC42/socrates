@@ -89,6 +89,8 @@ After analyzing the conversation, prepare your evaluation in the following JSON 
 }
 </output>
 
+Output JSON in single line format to avoid invalid escape characters. Do not include new lines in the score justification or in any strings in the weak points outline.
+
 Before providing the expert_confidence_score, explain your reasoning in the score_justification field. Consider the following:
 - The depth and accuracy of the person's knowledge
 - Their ability to provide nuanced responses
