@@ -170,7 +170,7 @@ export default function Home() {
         if(!window.confirm("Are you sure you want to restart the conversation? You will lose the current one.")) return;
 
         try {
-            const response = await postFetch("/socrates/restartConversation", {});
+            const response = await postFetch("/socrates/api/restartConversation", {});
             if(response.success) {
                 setConversation([]);
                 setActiveThesis("");
