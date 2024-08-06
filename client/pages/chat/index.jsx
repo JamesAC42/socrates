@@ -307,7 +307,7 @@ export default function Home() {
                     <li>After you've sent <strong>3 messages</strong>, you will be able to evaluate how the conversation went and see an analysis of your expertise.</li>
                     <li>It is recommended to continue until you no longer can comfortably answer any questions, and then evaluate.</li>
                     <li>You can continue the conversation after evaluating, and evaluate again, or restart for a new conversation at any time.</li>
-                    <li>Free accounts are limited to sending 15 messages per conversation and 5 evaluations. <Link href="/">See the pricing info here to upgrade and get longer conversations and unlimited evaluations.</Link></li>
+                    <li>Free accounts are limited to sending 15 messages per conversation and 5 evaluations. <Link href="/pricing">See the pricing info here to upgrade and get longer conversations and unlimited evaluations.</Link></li>
                 </ol>
 
             </div>

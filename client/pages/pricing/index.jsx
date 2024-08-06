@@ -2,10 +2,26 @@ import styles from "../../styles/pricing.module.scss";
 import Head from "next/head";
 import NavBar from "@/components/NavBar";
 import postFetch from "@/lib/postFetch";
+import { useContext } from "react";
+import UserContext from "@/contexts/UserContext";
+import { useRouter } from 'next/router';
 
 const Pricing = () => {
 
+    const {userInfo} = useContext(UserContext);
+    const router = useRouter();
+
     async function buyPremium() {    
+        
+        if(!userInfo) {
+            router.push('/signin');
+            return;
+        }
+
+        if(userInfo.tier === 2) {
+            return;
+        }
+
         let response = await postFetch("/socrates/api/createCheckoutSession", {});
         if(response.success) {
             window.location.href = response.url; 
@@ -38,7 +54,7 @@ const Pricing = () => {
                     </div>
                     <div 
                         onClick={buyPremium}
-                        className={styles.buyButton}>Subscribe Now</div>
+                        className={styles.buyButton}>{ userInfo?.tier === 2 ? "Already subscribed!" : "Subscribe Now"}</div>
                 </div>
 
             </div>

@@ -18,6 +18,7 @@ redisClient.auth(redisLogin.password);
 
 const datamodels = require('./datamodels.js');
 
+app.use('/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('trust proxy', 1);
