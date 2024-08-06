@@ -254,6 +254,15 @@
                 &:hover {
                     background-color: #2b5b46;
                 }
+
+                &.disabled {
+                    cursor:default;
+                    &:hover {
+                        background:#ffffff54;
+                        outline:none;
+                        color:#256833;
+                    }
+                }
             }
 
             .disabled {

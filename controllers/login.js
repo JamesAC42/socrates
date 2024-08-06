@@ -35,7 +35,8 @@ const login  = async (req, res, datamodels) => {
                 date_created: new Date(),
                 google_id: googleId,
                 name: name,
-                tier: 1
+                tier: 1,
+                password: ""
             });
             req.session.user = userId;
         } else {

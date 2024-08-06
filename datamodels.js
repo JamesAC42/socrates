@@ -26,6 +26,10 @@ const User = sequelize.define('User', {
   tier: {
     type: DataTypes.SMALLINT,
     allowNull: false
+  },
+  password: {
+    type:DataTypes.STRING(100),
+    allowNull: true
   }
 }, {
   tableName: 'users',

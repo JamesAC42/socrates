@@ -8,7 +8,7 @@ const sendMessage = async (req, res, llm) => {
     const {message} = req.body;
     
     if (typeof message !== 'string' || message.length > 2000) {
-        return res.status(400).json({ success: false, message: "Message must be a string with less than 1000 characters." });
+        return res.status(400).json({ success: false, message: "Message must be a string with less than 2000 characters." });
     }
 
     try {

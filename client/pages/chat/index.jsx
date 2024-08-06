@@ -34,45 +34,34 @@ export default function Home() {
             if (loadingConversation && !conversation.length) {
 
                 let messages;
-                let cachedMessages = localStorage.getItem("socrates:conversation");
-                if(!cachedMessages) {
-                    const response = await getFetch("/socrates/api/getConversation", {});
-                    setLoadingConversation(false);
-                    if (response.success) {
-                        messages = response.conversation;
-
-                        const convoInfo = getTopicAndThesis(messages[0]);
-                        setActiveTopic(convoInfo.topic);
-                        setActiveTopic(convoInfo.thesis);
-                        localStorage.setItem("socrates:topic", convoInfo.topic);
-                        localStorage.setItem("socrates:thesis", convoInfo.thesis);
-                        
-                        messages.splice(0,1);
-                        messages = messages.map((m) => {
-                            if(m.role === "user") {
-                                return cleanMessageUser(m); 
-                            } else {
-                                return cleanMessageAssistant(m);
-                            }
-                        });
-                    } else {
-                        console.error(response.message);
+                const response = await getFetch("/socrates/api/getConversation", {});
+                setLoadingConversation(false);
+                if (response.success) {
+                    
+                    messages = response.conversation;
+                    if(messages.length === 0) {
+                        setConversation([]);
                         return;
                     }
+
+                    const convoInfo = getTopicAndThesis(messages[0]);
+                    setActiveTopic(convoInfo.topic);
+                    setActiveTopic(convoInfo.thesis);
+                    
+                    messages.splice(0,1);
+                    messages = messages.map((m) => {
+                        if(m.role === "user") {
+                            return cleanMessageUser(m); 
+                        } else {
+                            return cleanMessageAssistant(m);
+                        }
+                    });
+                    setConversation(messages);
+
                 } else {
-                    messages = JSON.parse(cachedMessages); 
-                    let cachedTopic = localStorage.getItem("socrates:topic");
-                    let cachedThesis = localStorage.getItem("socrates:thesis");
-                    setActiveTopic(cachedTopic);
-                    setActiveThesis(cachedThesis);
-                }
-                setLoadingConversation(false);
-                if(messages.length === 0) {
-                    setConversation([]);
+                    console.error(response.message);
                     return;
                 }
-                localStorage.setItem("socrates:conversation", JSON.stringify(messages));
-                setConversation(messages);
             }
         };
         fetchConversation();
@@ -149,12 +138,9 @@ export default function Home() {
                 const convoInfo = getTopicAndThesis(messages[0]);
                 setActiveTopic(convoInfo.topic);
                 setActiveThesis(convoInfo.thesis);
-                localStorage.setItem("socrates:topic", convoInfo.topic);
-                localStorage.setItem("socrates:thesis", convoInfo.thesis);
                 messages.splice(0, 1);
                 messages[0] = cleanMessageAssistant(response.conversation[0]);
                 setConversation(messages);
-                localStorage.setItem("socrates:conversation", JSON.stringify(messages));
                 setTopic("");
                 setThesis("");
             }
@@ -175,9 +161,6 @@ export default function Home() {
                 setConversation([]);
                 setActiveThesis("");
                 setActiveTopic("");
-                localStorage.setItem("socrates:topic", "");
-                localStorage.setItem("socrates:thesis", "");
-                localStorage.setItem("socrates:conversation", JSON.stringify([]));
             }
         } catch(err) {
             console.error(err);
@@ -188,7 +171,7 @@ export default function Home() {
 
         if(!userInfo?.id) return;
         if(message.trim().length === 0) return;
-        if(conversation.length >= 39) return;
+        if(conversation.length >= 29) return;
 
         try {
             const updatedConversation = [
@@ -210,7 +193,6 @@ export default function Home() {
                     cleanMessageAssistant(data.message)
                 ];
                 setConversation(newConversation);
-                localStorage.setItem("socrates:conversation", JSON.stringify(newConversation));
                 
                 // Scroll to bottom after bot message is added
                 setTimeout(scrollToBottom, 0);
@@ -225,6 +207,7 @@ export default function Home() {
 
         if(!userInfo?.id) return;
         if(isLoadingEval) return;
+        if(isLoading) return;
         setIsLoadingEval(true);
         const response = await fetch('/socrates/api/evaluate', {
             method: 'POST'
@@ -347,18 +330,19 @@ export default function Home() {
                     }}
                     placeholder="Type message..."
                     value={message}
+                    maxLength={2000}
                     onChange={(e) => setMessage(e.target.value)}
                 />
             </div>
 
             <div className={styles.buttons}>
-                <button className={`${styles.send} ${conversation.length >= 39 ? styles.disabled : ""}`} onClick={sendMessage}>Send</button>
+                <button className={`${styles.send} ${conversation.length >= 39 || message.length === 0 ? styles.disabled : ""}`} onClick={sendMessage}>Send</button>
                 {
                     conversation.length > 5 ?
                     <button
-                        disabled={isLoadingEval} 
+                        disabled={isLoadingEval || isLoading} 
                         className={`${styles.evaluate} ${
-                            isLoadingEval ? styles.disabled : ""
+                            isLoadingEval || isLoading ? styles.disabled : ""
                         }`} 
                         onClick={evaluateConversation}>
                         {

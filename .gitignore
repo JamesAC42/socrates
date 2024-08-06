@@ -19,6 +19,7 @@ redis_login.json
 package-lock.json
 google_oauth.json
 psql_login.json
+stripe.json
 
 # production
 build

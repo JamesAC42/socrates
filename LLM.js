@@ -26,7 +26,6 @@ class LLM {
         let messageText = prompts.startConversation(topic,thesis);
         let messageItem = this.messageItem("user", messageText);
         conversation.push(messageItem);
-        await this.saveMessage(conversationKey, messageItem);
 
         let attempts = 0;
         let success = false;
@@ -52,13 +51,13 @@ class LLM {
 
     }
 
-    async conversationAddMessage(userToken, message) {
+    async conversationAddMessage(userToken, message, premium) {
            
         let convoId = await this.getUserConversationKey(userToken);
         const conversationKey = this.getConversationKey(userToken, convoId);
         let conversation = await this.getConversation(conversationKey);
 
-        if(conversation.length > 40) {
+        if(conversation.length >= 30) {
             throw new Error("Conversation has reached max length.");
         }
 

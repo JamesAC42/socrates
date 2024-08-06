@@ -46,6 +46,8 @@ const login = require("./controllers/login.js");
 const logout = require("./controllers/logout.js");
 const getSession = require('./controllers/getSession.js');
 const startConversation = require('./controllers/startConversation.js');
+const loginEmail = require('./controllers/loginEmail.js');
+const createUser = require('./controllers/createUser.js');
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -75,6 +77,14 @@ app.post('/evaluate', async (req, res) => {
 
 app.post('/restartConversation', async (req, res) => {
     restartConversation(req, res, llm);
+});
+
+app.post('/loginEmail', async (req, res) => {
+    loginEmail(req, res, datamodels);
+});
+
+app.post('/createAccount', async (req, res) => {
+    createUser(req, res, datamodels);
 });
 
 app.post('/login', async (req, res) => {

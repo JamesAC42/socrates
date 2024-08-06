@@ -6,5 +6,6 @@ CREATE TABLE users
     google_id character varying(255) COLLATE pg_catalog."default" NOT NULL,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     tier smallint NOT NULL,
+    password character varying(100) COLLATE pg_catalog."default",
     CONSTRAINT users_pkey PRIMARY KEY (id)
 );
