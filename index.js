@@ -105,7 +105,7 @@ app.post('/createCheckoutSession', async (req, res) => {
 });
 
 app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
-  handleWebhook(req, res, stripe, stripeLogin);
+  handleWebhook(req, res, stripe, stripeLogin, datamodels);
 });
 
 // Start the server
