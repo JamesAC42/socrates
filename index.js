@@ -11,6 +11,8 @@ const port = 5000;
 
 const config = require('./config.json');
 const redisLogin = require('./redis_login.json');
+const stripeLogin = require('./stripe.json');
+const stripe = require('stripe')(stripeLogin.key);
 
 redisClient.auth(redisLogin.password);
 
@@ -48,6 +50,8 @@ const getSession = require('./controllers/getSession.js');
 const startConversation = require('./controllers/startConversation.js');
 const loginEmail = require('./controllers/loginEmail.js');
 const createUser = require('./controllers/createUser.js');
+const createCheckoutSession = require('./controllers/createCheckoutSession.js');
+const handleWebhook = require('./controllers/handleWebhook.js');
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -68,11 +72,11 @@ app.post('/startConversation', async (req, res) => {
 });
 
 app.post('/sendMessage', async (req, res) => {
-    sendMessage(req, res, llm);
+    sendMessage(req, res, llm, datamodels);
 });
 
 app.post('/evaluate', async (req, res) => {
-    evaluate(req, res, llm);
+    evaluate(req, res, llm, datamodels, redisClient);
 });
 
 app.post('/restartConversation', async (req, res) => {
@@ -93,6 +97,14 @@ app.post('/login', async (req, res) => {
 
 app.post('/logout', async (req, res) => {
     logout(req, res);
+});
+
+app.post('/createCheckoutSession', async (req, res) => {
+  createCheckoutSession(req, res, stripe);
+});
+
+app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+  handleWebhook(req, res, stripe, stripeLogin);
 });
 
 // Start the server

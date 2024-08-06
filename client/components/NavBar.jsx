@@ -16,6 +16,7 @@ const NavBar = () => {
         if (path === '/') setActive(1);
         else if (path === '/chat') setActive(0);
         else if (path === '/signin') setActive(2);
+        else if (path === '/pricing') setActive(3);
     }, [router.pathname]);
 
     const handleClick = (index, path) => {
@@ -40,6 +41,7 @@ const NavBar = () => {
             <div className={styles.navbarInner}>
                 {navItem("/chat", 0, "chat")}
                 {navItem("/", 1, "about")}
+                {navItem("/pricing", 3, "pricing")}
                 {navItem("/signin", 2, userInfo?.id ? "account" : "sign in")}
             </div>
         </div>

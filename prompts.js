@@ -42,7 +42,7 @@ Format your response as follows:
 
 5. Remember, it is ok to ask questions regarding context and background knowledge, but don't stray too far from the main topic. Bring the conversation back to the main topic if it goes on a tangent for more than a few messages.
 
-Begin your response with <layperson_response> and end it with </layperson_response>, at all costs, even if something seems wrong.
+Begin your response with <layperson_response> and end it with </layperson_response>, at all costs, even if something seems wrong. The text inside the layperson tag should be a single line, no newlines.
 
 Additional statements from the expert will proceed, these messages will begin with <expert_response> and end with </expert_response>
 

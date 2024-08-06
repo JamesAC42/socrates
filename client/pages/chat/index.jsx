@@ -67,6 +67,14 @@ export default function Home() {
         fetchConversation();
     }, [loadingConversation, conversation.length]);
 
+    const disableLength = () => {
+        if(!userInfo) return true;
+        if(userInfo.tier === 1) {
+            return conversation.length >= 29;
+        } else {
+            return conversation.length >= 59;
+        }
+    }
 
     const getTopicAndThesis = (message) => {
 
@@ -171,7 +179,7 @@ export default function Home() {
 
         if(!userInfo?.id) return;
         if(message.trim().length === 0) return;
-        if(conversation.length >= 29) return;
+        if(disableLength()) return;
 
         try {
             const updatedConversation = [
@@ -214,7 +222,11 @@ export default function Home() {
         });
         const data = await response.json();
         setIsLoadingEval(false);
-        setEval(data.evaluation);
+        if(data.success) {
+            setEval(data.evaluation);
+        } else {
+            alert(data.message);
+        }
         
     }
 
@@ -281,12 +293,22 @@ export default function Home() {
 
                 <input value={thesis} onChange={(e) => setThesis(e.target.value)} placeholder="Thesis (Optional)..." maxLength={200} type="text" className={styles.thesisInput}/>
 
-                <div className={styles.buttons}>
+                <div className={styles.startConversationButton}>
                     <div
                         onClick={() => startConversation()} 
                         className={`${styles.begin} ${loadingBegin ? styles.disabled : ""}`}>
                             {loadingBegin ? "Starting..." : "Begin"}</div>
                 </div>
+                
+                <h3>tips:</h3>
+                <ol>
+                    <li>Answer the questions as thoroughly as you can. Try to demonstrate the depth of your knowledge on the subject.</li>
+                    <li>You don't have to answer every question, but not doing so will be reflected in your analysis.</li>
+                    <li>After you've sent <strong>3 messages</strong>, you will be able to evaluate how the conversation went and see an analysis of your expertise.</li>
+                    <li>It is recommended to continue until you no longer can comfortably answer any questions, and then evaluate.</li>
+                    <li>You can continue the conversation after evaluating, and evaluate again, or restart for a new conversation at any time.</li>
+                    <li>Free accounts are limited to sending 15 messages per conversation and 5 evaluations. <Link href="/">See the pricing info here to upgrade and get longer conversations and unlimited evaluations.</Link></li>
+                </ol>
 
             </div>
         )
@@ -336,14 +358,16 @@ export default function Home() {
             </div>
 
             <div className={styles.buttons}>
-                <button className={`${styles.send} ${conversation.length >= 39 || message.length === 0 ? styles.disabled : ""}`} onClick={sendMessage}>Send</button>
+                <button className={`${styles.send} ${disableLength() || message.length === 0 ? styles.disabled : ""}`} onClick={sendMessage}>
+                    {disableLength() ? "Limit Reached" : "Send"}
+                </button>
                 {
                     conversation.length > 5 ?
                     <button
                         disabled={isLoadingEval || isLoading} 
                         className={`${styles.evaluate} ${
                             isLoadingEval || isLoading ? styles.disabled : ""
-                        }`} 
+                        } ${isLoadingEval ? styles.loadingAnimation : ""}`} 
                         onClick={evaluateConversation}>
                         {
                             isLoadingEval ?

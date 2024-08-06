@@ -1,0 +1,6 @@
+@import "./mixins.module.scss";
+
+
+.paymentResult {
+    @include content-outer;
+}

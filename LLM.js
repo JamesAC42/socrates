@@ -45,6 +45,7 @@ class LLM {
             throw new Error("Could not generate valid response.");
         }
 
+        await this.saveMessage(conversationKey, messageItem);
         await this.saveMessage(conversationKey, response);
         conversation.push(response);
         return conversation;
@@ -57,7 +58,8 @@ class LLM {
         const conversationKey = this.getConversationKey(userToken, convoId);
         let conversation = await this.getConversation(conversationKey);
 
-        if(conversation.length >= 30) {
+        let limit = premium ? 60 : 30;
+        if(conversation.length >= limit) {
             throw new Error("Conversation has reached max length.");
         }
 
@@ -70,11 +72,20 @@ class LLM {
         } else {
             conversation.push(messageItem);
         }
-        await this.saveMessage(conversationKey, messageItem);
 
-        const response = await this.promptConversation(conversation);
+        let attempts = 0;
+        let response;
+        while(attempts++ < 5) {
+            try {
+                response = await this.promptConversation(conversation);
+                break;
+            } catch(err) {
+                console.error(err);
+                continue;
+            }
+        }
         
-        conversation.push(response);
+        await this.saveMessage(conversationKey, messageItem);
         await this.saveMessage(conversationKey, response);
         
         return response;
@@ -270,19 +281,22 @@ class LLM {
 
     async promptConversation(conversation) {
         
-        try {
-            const msg = await this.anthropic.messages.create({
-                model: "claude-3-5-sonnet-20240620",
-                max_tokens: 1000,
-                temperature: 0.7,
-                system: "You are going to act as a curious layperson having a conversation with a domain expert. Your goal is to ask questions, seek clarifications, and request follow-ups to fully engage the conversation partner and encourage them to reveal the breadth of their knowledge and understanding.",
-                messages: conversation
-            });
-            return this.messageItem(msg.role, msg.content[0].text);
-        } catch(err) {
-            console.error(err);
-            throw err;
+        const msg = await this.anthropic.messages.create({
+            model: "claude-3-5-sonnet-20240620",
+            max_tokens: 1000,
+            temperature: 0.7,
+            system: "You are going to act as a curious layperson having a conversation with a domain expert. Your goal is to ask questions, seek clarifications, and request follow-ups to fully engage the conversation partner and encourage them to reveal the breadth of their knowledge and understanding.",
+            messages: conversation
+        });
+
+        // Validate the message text contains exactly one set of <layperson_response> tags with content
+        const responseText = msg.content[0].text.trim();
+        const regex = /<layperson_response>([\s\S]*?)<\/layperson_response>/;
+        const matches = responseText.match(regex);
+        if (!matches || !matches[1].trim()) {
+            throw new Error("Invalid response format: Missing or incorrect <layperson_response> tags");
         }
+        return this.messageItem(msg.role, responseText);
 
     }
 
@@ -323,7 +337,7 @@ class LLM {
             const messageText = prompts.evaluateConversation(conversationLog);
             const msg = await this.anthropic.messages.create({
                 model: "claude-3-5-sonnet-20240620",
-                max_tokens: 1000,
+                max_tokens: 3000,
                 temperature: 0.7,
                 system: "You are a top domain expert with perfect recall in every subject in existence. Your task is to evaluate a conversation between a person and an AI chatbot, focusing on the person's responses. You will analyze the conversation to identify any weak points in the person's knowledge of the domain.",
                 messages: [this.messageItem("user", messageText)]

@@ -9,6 +9,10 @@
 
     align-items:start;
 
+    transform:translateY(2rem);
+
+    padding:2rem 3rem;
+
     h1, h2, h4, p, ul {
         text-align:left;
         margin:0;
@@ -50,6 +54,7 @@
         @include compact-container;
 
         justify-content: flex-start;
+        transform:none;
 
         h1, h2, h4, p, ul {
             max-width:100dvw;
