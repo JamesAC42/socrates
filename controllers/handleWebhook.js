@@ -1,6 +1,6 @@
 const getUserById = require("../repos/getUserById");
 
-async function handleWebhook(request, response, stripe, stripeLogin) {
+async function handleWebhook(request, response, stripe, stripeLogin, datamodels) {
 
     const sig = request.headers['stripe-signature'];
 
@@ -35,7 +35,7 @@ async function handleWebhook(request, response, stripe, stripeLogin) {
                     }
                 });
                 
-                const userModel = await getUserById(user);
+                const userModel = await getUserById(user, datamodels);
                 if (userModel) {
                     userModel.tier = 2;
                     await userModel.save();
@@ -49,7 +49,7 @@ async function handleWebhook(request, response, stripe, stripeLogin) {
             user = subscription.metadata.client_reference_id;
             if(user) {
                 
-                const userModel = await getUserById(user);
+                const userModel = await getUserById(user, datamodels);
                 if (userModel) {
                     userModel.tier = 2;
                     await userModel.save();
@@ -65,7 +65,7 @@ async function handleWebhook(request, response, stripe, stripeLogin) {
             subscription = await stripe.subscriptions.retrieve(session.subscription);
             user = subscription.metadata.client_reference_id;
             
-            const userModel = await getUserById(user);
+            const userModel = await getUserById(user, datamodels);
             if (userModel) {
                 userModel.tier = 1;
                 await userModel.save();
