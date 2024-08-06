@@ -180,6 +180,7 @@ export default function Home() {
         if(!userInfo?.id) return;
         if(message.trim().length === 0) return;
         if(disableLength()) return;
+        if(isLoading) return;
 
         try {
             const updatedConversation = [
